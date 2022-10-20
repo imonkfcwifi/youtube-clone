@@ -1,0 +1,7 @@
+mixin video(dideo)
+        div
+            h4 
+                a(href=`/videos/${dideo.id}`)=dideo.title 
+            p=dideo.description
+            small=dideo.createdAt
+            hr
