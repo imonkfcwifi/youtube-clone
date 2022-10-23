@@ -25,12 +25,8 @@ export const getEdit = async (req, res) => {
     return res.render("edit", { pageTitle: `Edit : ${video.title}`, video });
 }
 
-export const postEdit = (req, res) => {
+export const postEdit = async (req, res) => {
     const { id } = req.params;
-<<<<<<< Updated upstream
-    const { title } = req.body;
-    console.log(req.body.title);
-=======
     const { title, description, hashtags } = req.body
     const video = await dideo.exists({ _id: id });
     // find mongoose id (property) = const id (any)
@@ -43,7 +39,6 @@ export const postEdit = (req, res) => {
         hashtags: dideo.formatHashtags(hashtags)
     })
 
->>>>>>> Stashed changes
     return res.redirect(`/videos/${id}`);
 }
 
