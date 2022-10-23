@@ -4,7 +4,7 @@ import dideo from "../models/video";
 // dideo.format~~ 로 써도 됨
 export const homepageVideos = async (req, res) => {
     // synchronous 상황을 해야 await 가능 cuz await은 문법상 funtion에서만 활용가능
-    const videos = await dideo.find({});
+    const videos = await dideo.find({}).sort({ createdAt: "asc" });
     return res.render("home", { pageTitle: `"SWEET HOME"`, videos });
 }
 
@@ -51,6 +51,7 @@ export const postUpload = async (req, res) => {
     try {
         await dideo.create(
             {
+
                 title,
                 description,
                 createdAt: Date.now(),
@@ -74,6 +75,16 @@ export const deleteVideo = async (req, res) => {
     const { id } = req.params;
     await dideo.findByIdAndDelete(id);
     // delete video
+    //  what is diffrent by remove and delete?
+    // remove is permanent delete in sever so we need do delete in findByIdAndDelete!
     return res.redirect("/");
 
+}
+
+export const search = (req, res) => {
+    const { keyword } = req.query
+    if (keyword) {
+        // search
+    }
+    return res.render("search", { pageTitle: "Search" });
 }
