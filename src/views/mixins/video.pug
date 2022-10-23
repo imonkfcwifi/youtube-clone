@@ -3,5 +3,8 @@ mixin video(dideo)
             h4 
                 a(href=`/videos/${dideo.id}`)=dideo.title 
             p=dideo.description
+            ul
+                each hashtag in dideo.hashtags
+                    li=hashtag 
             small=dideo.createdAt
             hr
