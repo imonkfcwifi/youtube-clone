@@ -24,10 +24,21 @@ export const getEdit = async (req, res) => {
     return res.render("edit", { pageTitle: `Edit : ${video.title}`, video });
 }
 
-export const postEdit = (req, res) => {
+export const postEdit = async (req, res) => {
     const { id } = req.params;
-    const { title } = req.body;
-    console.log(req.body.title);
+    const { title, description, hashtags } = req.body
+    const video = await dideo.exists({ _id: id });
+    // find mongoose id (property) = const id (any)
+    if (!video) {
+        return res.render("404", { pageTitle: "Video Not Found..!" });
+    }
+    await dideo.findByIdAndUpdate(id, {
+        title,
+        description,
+        hashtags: hashtags.split(",").map(word => word.startsWith("#")
+            ? word : `#${word}`),
+    })
+
     return res.redirect(`/videos/${id}`);
 }
 

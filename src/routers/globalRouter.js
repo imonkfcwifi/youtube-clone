@@ -7,6 +7,7 @@ const globalRouter = express.Router();
 globalRouter.get("/", homepageVideos);
 globalRouter.get("/join", join);
 globalRouter.get("/login", login);
+// nooo
 
 
 export default globalRouter;
