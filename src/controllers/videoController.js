@@ -81,9 +81,12 @@ export const deleteVideo = async (req, res) => {
 
 }
 
-export const search = (req, res) => {
+export const search = async (req, res) => {
     const { keyword } = req.query
     if (keyword) {
+        const videos = await dideo.find({
+
+        })
         // search
     }
     return res.render("search", { pageTitle: "Search" });
