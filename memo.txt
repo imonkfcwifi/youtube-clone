@@ -1,0 +1,28 @@
+쉽게 설명드리면 object를 만드는 키워드라고 생각하시면 됩니다.
+왜 new를 통해 obj를 만드냐 하면 비슷한 구조를 가진 obj를 편하게 만들고 싶어서 그렇습니다.
+
+예를들면
+
+const car1 = { name : "아반떼" }
+const car2 = { name : "레이" }
+const car3 = { name : "소나타" }
+
+이렇게 3개의 obj를 literal로 만들면 일일이 작성해줘야 되는데 new키워드를 사용하게 되면 좀 더 편해집니다.
+
+function Car(name) { this.name = name }
+
+const car1 = new Car('아반떼')
+const car2 = new Car('레이')
+const car3 = new Car('소나타')
+
+예시는 알기 쉽게 이름만으로 구성했지만 obj property가 무수히 많아졌다고 가정하면 literal 보다는 new를 쓰는게 훨씬 더 편합니다.
+이를 위해 ES6부터는 Class도 도입됐으니까 한번 검토해보시면 좋을 것 같네요 :)
+
+[new operator]
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new
+
+[RegExp]
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+
+[RegExp() constructor]
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp

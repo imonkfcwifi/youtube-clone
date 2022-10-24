@@ -75,19 +75,21 @@ export const deleteVideo = async (req, res) => {
     const { id } = req.params;
     await dideo.findByIdAndDelete(id);
     // delete video
-    //  what is diffrent by remove and delete?
+    // what is diffrent by remove and delete?
     // remove is permanent delete in sever so we need do delete in findByIdAndDelete!
     return res.redirect("/");
 
 }
 
 export const search = async (req, res) => {
-    const { keyword } = req.query
+    const { keyword } = req.query;
+    let videos = [];
     if (keyword) {
-        const videos = await dideo.find({
-
-        })
-        // search
+        videos = await dideo.find({
+            title: {
+                $regex: new RegExp(keyword, "i"),
+            },
+        });
     }
-    return res.render("search", { pageTitle: "Search" });
+    return res.render("search", { pageTitle: "Search", videos });
 }
