@@ -33,6 +33,8 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 https://inpa.tistory.com/entry/EXPRESS-%F0%9F%93%9A-%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4-%F0%9F%92%AF-%EC%9D%B4%ED%95%B4-%EC%A0%95%EB%A6%AC
 //ex 
 // const server = http.createServer((req, res) => { // 이 함수는 그냥 처리결과를 하기위한 콜백함수});
-
+1. pug
+2. controller
+3. router, server, db,, init
 
 sudo mongod --dbpath ~/data/db

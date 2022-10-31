@@ -4,6 +4,7 @@ import session from "express-session";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import { localsMiddleware } from "./middlewares";
 
 
 const app = express();
@@ -19,18 +20,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-app.get("/add-one", (req, res, next) => {
-    req.session.potato += 1;
-    next();
-});
-app.use((req, res, next) => {
-    req.sessionStore.all((error, sessions) => {
-        console.log(sessions);
 
-    });
-
-    return res.send(`${req.session.id} ${req.session.potato}`);
-});
 // 이로서 알게된 사실 : middle ware 의 next를 잘 활용해서 해야한다.
 // 기존에 존재하던 req.res와 달리 express의 middleware를 활용하는 부분에서 몇가지를 쓸때는
 // 최종 return 하기전 next를 해줘야 다음 middleware로 넘어갈수있기 때문이다.
@@ -38,11 +28,8 @@ app.use((req, res, next) => {
 //ex 
 // const server = http.createServer((req, res) => { // 이 함수는 그냥 처리결과를 하기위한 콜백함수});
 
+app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
-
 export default app;
-
-// ssss
-

@@ -6,19 +6,25 @@ html(lang=ko)
         link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.11/mvp.css")
     body
         header 
-            h1=pageTitle
+            h1=pageTitle | RohTube
             nav 
                 ul
                     li         
                         a(href="/") Go Home!!
+                    if loggedIn
+                        li         
+                            a(href="/logout") Go LogOut!!
+                        li 
+                            a(href="/my-profile") #{loggedInUser.name}의 Profile !!
+                    else
+                        li
+                            a(href="/join") Join !!
+                        li         
+                            a(href="/login") Login !!
+                    li
+                        a(href="/search") Go Search!!
                     li 
                         a(href="/videos/upload") Upload Video!!
-                    li         
-                        a(href="/search") Go Search!!
-                    li
-                        a(href="/join") Join !!
-                    li
-                        a(href="/login") Login !!
 
         main 
             block content 
