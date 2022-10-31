@@ -16,10 +16,14 @@ app.set("views", process.cwd() + "/src/views");
 app.use(morganMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
-    store: Mongostore.create({ mongoUrl: "mongodb://127.0.0.1:27017/youtube" }),
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 20000,
+    },
+
+    store: Mongostore.create({ mongoUrl: process.env.DB_URL }),
 }));
 
 

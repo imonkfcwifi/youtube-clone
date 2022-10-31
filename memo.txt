@@ -37,4 +37,20 @@ https://inpa.tistory.com/entry/EXPRESS-%F0%9F%93%9A-%EB%AF%B8%EB%93%A4%EC%9B%A8%
 2. controller
 3. router, server, db,, init
 
+* resave : 모든 request마다 세션의 변경사항이 있든 없든 세션을 다시 저장한다.
+- true:
++ 스토어에서 세션 만료일자를 업데이트 해주는 기능이 따로 없으면 true로 설정하여 매 request마다 세션을 업데이트 해주게 한다.
+- false:
++ 변경사항이 없음에도 세션을 저장하면 비효율적이므로 동작 효율을 높이기 위해 사용한다.
++ 각각 다른 변경사항을 요구하는 두 가지 request를 동시에 처리할때 세션을 저장하는 과정에서 충돌이 발생할 수 있는데 이를 방지하기위해 사용한다.
+
+
+* saveUninitialized : uninitialized 상태인 세션을 저장한다. 여기서 uninitialized 상태인 세션이란 request 때 생성된 이후로 아무런 작업이 가해지지않는 초기상태의 세션을 말한다.
+- true:
++ 클라이언트들이 서버에 방문한 총 횟수를 알고자 할때 사용한다.
+- false:
++ uninitialized 상태인 세션을 강제로 저장하면 내용도 없는 빈 세션이 스토리지에 계속 쌓일수 있다. 이를 방지, 저장공간을 아끼기 위해 사용한다.
+
+env 파일은 package.json 옆에 둬야 함.
+
 sudo mongod --dbpath ~/data/db
