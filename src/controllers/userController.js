@@ -1,4 +1,5 @@
 import User from "../models/user";
+import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -81,18 +82,31 @@ export const finishGithubLogin = async (req, res) => {
         client_secret: process.env.GH_SECRET,
         code: req.query.code,
     }
-    console.log(config);
-
     const params = new URLSearchParams(config).toString();
     const finalUrl = `${baseUrl}?${params}`;
-    const data = await fetch(finalUrl, {
+    const tokenRequest = await (await fetch(finalUrl, {
         method: "POST",
         headers: {
             Accept: "application/json",
         },
-    });
-    const json = await data.json();
-    console.log(json);
+    })
+    ).json();
+    // await( await fetch & 유저가 받는 토큰).JSON
+
+    if ("access_token" in tokenRequest) {
+        const { access_token } = tokenRequest;
+        const userRequest = await (
+            await fetch("https://api.github.com/user", {
+                headers: {
+                    Authorization: `token ${access_token}`,
+                },
+            })
+        ).json();
+        console.log(userRequest);
+        // await( await fetch & 깃헙에 유저보내는 토큰).JSON
+    } else {
+        return res.redirect("/login");
+    }
 };
 
 // check if aacount exist
