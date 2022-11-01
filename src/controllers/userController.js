@@ -89,11 +89,13 @@ export const finishGithubLogin = async (req, res) => {
         headers: {
             Accept: "application/json",
         },
-    })
-    ).json();
-    // await( await fetch & 유저가 받는 토큰).JSON
+    })).json();
+    // 원문은 두번 써야 했음 const json = await tokenRequest.json
+    // await( await fetch & 유저가 받는 토큰).json()
 
-    if ("access_token" in tokenRequest) {
+    if ("access_token" in tokenRequest)
+    // 즉 여기서 "access_token in json (const로 만든 상수값) 대신 한번에 묶은 tokenRequest를 사용"
+    {
         const { access_token } = tokenRequest;
         const userRequest = await (
             await fetch("https://api.github.com/user", {
@@ -103,7 +105,7 @@ export const finishGithubLogin = async (req, res) => {
             })
         ).json();
         console.log(userRequest);
-        // await( await fetch & 깃헙에 유저보내는 토큰).JSON
+        // await( await fetch & 깃헙에 유저보내는 토큰).JSON => 즉 fetch 요청 후 fetch에 있는 내용의 JSOn을 받게 됨
     } else {
         return res.redirect("/login");
     }
