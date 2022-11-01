@@ -53,4 +53,11 @@ https://inpa.tistory.com/entry/EXPRESS-%F0%9F%93%9A-%EB%AF%B8%EB%93%A4%EC%9B%A8%
 
 env 파일은 package.json 옆에 둬야 함.
 
+1. fetch('url')로 다른 서버를 통해 데이터를 가져올 수있다.
+하지만, res.body 에 담겨있는 날것의 url로는 제대로 된 객체를 받아올 수 없다.
+
+2.때문에 중간에 .json 함수가 response의 스트림을 가져와 끝까지 읽고, res.body의 텍스트를 promise의 형태로 반환한다.
+
+3. 다른 서버에서 데이터를 object 형식으로 받아온다.
+
 sudo mongod --dbpath ~/data/db
