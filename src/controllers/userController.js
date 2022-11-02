@@ -97,15 +97,28 @@ export const finishGithubLogin = async (req, res) => {
     // 즉 여기서 "access_token in json (const로 만든 상수값) 대신 한번에 묶은 tokenRequest를 사용"
     {
         const { access_token } = tokenRequest;
-        const userRequest = await (
-            await fetch("https://api.github.com/user", {
+        const apiUrl = "https://api.github.com"
+        const userData = await (
+            await fetch(`${apiUrl}/user`, {
                 headers: {
                     Authorization: `token ${access_token}`,
                 },
             })
         ).json();
-        console.log(userRequest);
+        console.log(userData);
+        const emailData = await (await fetch(`${apiUrl}/user/emails`, {
+            headers: {
+                Authorization: `token ${access_token}`,
+            }
+        })).json();
         // await( await fetch & 깃헙에 유저보내는 토큰).JSON => 즉 fetch 요청 후 fetch에 있는 내용의 JSOn을 받게 됨
+        console.log(emailData);
+        const email = emailData.find(
+            (email) => email.primary === true && email.verified === true
+        )
+        if (!email) {
+            return res.redirect("/login");
+        }
     } else {
         return res.redirect("/login");
     }
