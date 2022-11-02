@@ -42,7 +42,7 @@ export const postLogin = async (req, res) => {
     const { username, password } = req.body;
     const pageTitle = "Login";
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username, githubId: false });
 
     if (!user) {
         return res.status(400).render("login",
@@ -75,6 +75,8 @@ export const startGithubLogin = (req, res) => {
     const finalUrl = `${baseUrl}?${params}`;
     return res.redirect(finalUrl);
 };
+
+
 export const finishGithubLogin = async (req, res) => {
     const baseUrl = "https://github.com/login/oauth/access_token";
     const config = {
@@ -98,13 +100,17 @@ export const finishGithubLogin = async (req, res) => {
     {
         const { access_token } = tokenRequest;
         const apiUrl = "https://api.github.com"
+        // gitgub에서 data를
+
         const userData = await (
+
             await fetch(`${apiUrl}/user`, {
                 headers: {
                     Authorization: `token ${access_token}`,
                 },
             })
         ).json();
+
         console.log(userData);
         const emailData = await (await fetch(`${apiUrl}/user/emails`, {
             headers: {
@@ -113,21 +119,52 @@ export const finishGithubLogin = async (req, res) => {
         })).json();
         // await( await fetch & 깃헙에 유저보내는 토큰).JSON => 즉 fetch 요청 후 fetch에 있는 내용의 JSOn을 받게 됨
         console.log(emailData);
-        const email = emailData.find(
+        const emailObj = emailData.find(
+
             (email) => email.primary === true && email.verified === true
+
         )
-        if (!email) {
+        if (!emailObj) {
+
             return res.redirect("/login");
+
         }
+        let user = await (User.findOne({ email: emailObj.email }))
+
+        if (!user) {
+
+            user = await User.create({
+
+                name: userData.name,
+                username: userData.login,
+                email: emailObj.email,
+                password: "",
+                location: userData.location,
+                githubId: true,
+                avatarUrl: userData.avatar_url
+                // user 발견 못할 시 user에 대한 정의 해주기
+                // user.blabla <- blabla part는 userdata의 gitgub에서 준 data 의 object name
+            });
+        }
+
+        req.session.loggedIn = true;
+        req.session.user = user;
+        return res.redirect("/");
+        // github data email로 가입시켜버리기
+        // user 발견시 if(!user) 무시후 로그인
+
     } else {
+
         return res.redirect("/login");
+
     }
 };
-
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+};
 // check if aacount exist
 //  check if password exist
 
 export const edit = (req, res) => res.send("edit user");
-export const remove = (req, res) => res.send("remove");
-export const logout = (req, res) => res.send("log out!");
 export const see = (req, res) => res.send("see the profile");
