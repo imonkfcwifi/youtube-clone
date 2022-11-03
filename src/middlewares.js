@@ -6,6 +6,23 @@ export const localsMiddleware = (req, res, next) => {
     next();
 };
 
+export const protectorMiddleware = (req, res, next) => {
+    if (req.session.loggedIn) {
+        next();
+    }
+    else {
+        return res.redirect("/login");
+    }
+}
+
+export const publicOnlyMiddleware = (req, res, next) => {
+    if (!req.session.loggedIn) {
+        next();
+    }
+    else {
+        return res.redirect("/")
+    }
+}
 
 // locals는 templete이 local object에 접근할 수 있게 해주는 장치이다.
 // pug에서 마음껏 퍼갈 수 있음.
