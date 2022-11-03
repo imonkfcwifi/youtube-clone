@@ -13,7 +13,9 @@ html(lang=ko)
                         a(href="/") Go Home!!
                     if loggedIn
                         li         
-                            a(href="/users/logout") Go LogOut!!
+                            a(href="/users/logout") Go Logout!!
+                        li         
+                            a(href="/users/edit") Go edit Profile!!
                         li 
                             a(href="/my-profile") #{loggedInUser.name}의 Profile !!
                     else
@@ -22,9 +24,9 @@ html(lang=ko)
                         li         
                             a(href="/login") Login !!
                     li
-                        a(href="/search") Go Search!!
+                        a(href="/search") Go Search !!
                     li 
-                        a(href="/videos/upload") Upload Video!!
+                        a(href="/videos/upload") Upload Video !!
 
         main 
             block content 

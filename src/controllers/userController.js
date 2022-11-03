@@ -148,7 +148,9 @@ export const finishGithubLogin = async (req, res) => {
         }
 
         req.session.loggedIn = true;
+        // 로그인을 하면 session.loggedIn값이 true가 되도록 한다.
         req.session.user = user;
+        // user가 발견한 것들을 session의 user object에 첨가
         return res.redirect("/");
         // github data email로 가입시켜버리기
         // user 발견시 if(!user) 무시후 로그인
@@ -165,6 +167,10 @@ export const logout = (req, res) => {
 };
 // check if aacount exist
 //  check if password exist
-
-export const edit = (req, res) => res.send("edit user");
+export const getEdit = (req, res) => {
+    return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+export const postEdit = (req, res) => {
+    return res.render("post-profile", { pageTitle: "post profile" });
+};
 export const see = (req, res) => res.send("see the profile");

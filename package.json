@@ -1,7 +1,7 @@
 {
   "name": "youtube",
   "version": "1.0.0",
-  "description": "video cafe!",
+  "description": "The Korean Leaguer!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/imonkfcwifi/wetube.git"
@@ -10,7 +10,7 @@
     "dev": "nodemon --exec babel-node src/init.js"
   },
   "keywords": [
-    "youtube"
+    "The Korean Leaguer!, Heung min son, Kim min jae, Kangin Lee"
   ],
   "author": "imonkfcwifi",
   "license": "MIT",
