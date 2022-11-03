@@ -60,4 +60,6 @@ env 파일은 package.json 옆에 둬야 함.
 
 3. 다른 서버에서 데이터를 object 형식으로 받아온다.
 
+tip)파일이 열려있고 열어놓은파일의 함수를 작성하면 vsc가 자동으로 import 해준다
+
 sudo mongod --dbpath ~/data/db

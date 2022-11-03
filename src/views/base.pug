@@ -10,23 +10,23 @@ html(lang=ko)
             nav 
                 ul
                     li         
-                        a(href="/") Go Home!!
+                        a(href="/") Home
                     if loggedIn
-                        li         
-                            a(href="/users/logout") Go Logout!!
+                        li 
+                            a(href="/videos/upload") Upload Video
                         li         
                             a(href="/users/edit") Go edit Profile!!
                         li 
-                            a(href="/my-profile") #{loggedInUser.name}의 Profile !!
+                            a(href="/my-profile") #{loggedInUser.name}의 Profile
+                        li         
+                            a(href="/users/logout") Logout
                     else
                         li
-                            a(href="/join") Join !!
+                            a(href="/join") Join
                         li         
-                            a(href="/login") Login !!
-                    li
-                        a(href="/search") Go Search !!
-                    li 
-                        a(href="/videos/upload") Upload Video !!
+                            a(href="/login") Login
+                        li
+                            a(href="/search") Search
 
         main 
             block content 
