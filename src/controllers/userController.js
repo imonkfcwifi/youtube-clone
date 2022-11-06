@@ -143,6 +143,7 @@ export const finishGithubLogin = async (req, res) => {
                 location: userData.location,
                 githubId: true,
                 avatarUrl: userData.avatar_url
+
                 // user 발견 못할 시 user에 대한 정의 해주기
                 // user.blabla <- blabla part는 userdata의 gitgub에서 준 data 의 object name
             });
@@ -211,5 +212,18 @@ export const postEdit = async (req, res) => {
     req.session.user = updatedUser;
     return res.redirect("/users/edit");
 };
+
+
+export const getChangePassword = (req, res) => {
+    if (req.session.user.githubId === true) {
+        return res.redirect("/");
+    }
+    return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = (req, res) => {
+    // send notification
+    return res.redirect("/");
+};
+
 
 export const see = (req, res) => res.send("see the profile");
