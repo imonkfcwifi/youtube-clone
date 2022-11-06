@@ -1,6 +1,8 @@
 extends base
+
 block content
-  if errorMessage 
+
+    if errorMessage 
         span=errorMessage
     form(method="POST")
         input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
@@ -8,6 +10,7 @@ block content
         input(placeholder="Username", name="username", type="text", required, value=loggedInUser.username)
         input(placeholder="Location", name="location", type="text", required, value=loggedInUser.location)
         input(type="submit", value="Update Profile")
-        if !loggedInUser.githubId
+        if !loggedInUser.socialOnly
             hr
             a(href="change-password") Change Password &rarr;
+

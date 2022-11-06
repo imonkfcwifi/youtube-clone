@@ -218,11 +218,46 @@ export const getChangePassword = (req, res) => {
     if (req.session.user.githubId === true) {
         return res.redirect("/");
     }
-    return res.render("users/change-password", { pageTitle: "Change Password" });
+    return res.status(400).render("users/change-password", { pageTitle: "Change Password" });
 };
-export const postChangePassword = (req, res) => {
+export const postChangePassword = async (req, res) => {
+    const {
+        session: {
+            user: { _id },
+        },
+        body: { oldPassword,
+            newPassword,
+            newPasswordConfirmation },
+    } = req;
+    const user = await User.findById(_id);
+    const ok = await bcrypt.compare(oldPassword, user.password);
+    // await 이므로 password를 submit 하면 db에 있는 id에 새로 update 된 user.pass로 comepare 할 수 있게 된다 즉 session 에 있는 password를 생각하지 않아도 된다ㅣ.\
+    if (oldPassword === newPassword) {
+        return res.status(400).render('users/change-password', {
+            pageTitle,
+            errorMessage: 'The old password equals new password',
+        });
+    }
+    if (!ok) {
+        return res.render("users/change-password",
+            {
+                pageTitle: " Change Password",
+                errorMessage: "The current password does not the match"
+            })
+    }
+    if (newPassword !== newPasswordConfirmation) {
+        return res.render("users/change-password",
+            {
+                pageTitle: " Change Password",
+                errorMessage: "The new password does not the match"
+            })
+    }
     // send notification
-    return res.redirect("/");
+
+    user.password = newPassword
+    await user.save();
+    // promise => await, db에 저장하는데 시간이 걸리기 때문에
+    return res.redirect("/users/logout");
 };
 
 
