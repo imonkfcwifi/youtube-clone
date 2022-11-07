@@ -180,8 +180,9 @@ export const postEdit = async (req, res) => {
         session: {
             user: { _id, email: sessionEmail, username: sessionUsername },
         },
-        body: { name, email, username, location },
+        body: { name, email, username, location }, file,
     } = req;
+    console.log(file);
     let searchParam = [];
     if (sessionEmail !== email) {
         searchParam.push({ email });

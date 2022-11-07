@@ -62,4 +62,14 @@ env 파일은 package.json 옆에 둬야 함.
 
 tip)파일이 열려있고 열어놓은파일의 함수를 작성하면 vsc가 자동으로 import 해준다
 
+단축키 모음 :
+ctrl + p = 퀵 오픈
+ctrl + ` = 터미널 열기
+home , end = 문장의 첫부분, 끝부분
+ctrl + <- -> = 단어별 이동
+ctrl + enter = 다음 줄로 이동 
+ctrl + d = 멀티 단어 셀렉터
+ctrl + u = 이전 커서로 이동
+alt + shift + drag , shift + alt + i = 다중셀럭터
+
 sudo mongod --dbpath ~/data/db
