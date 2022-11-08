@@ -72,4 +72,6 @@ ctrl + d = 멀티 단어 셀렉터
 ctrl + u = 이전 커서로 이동
 alt + shift + drag , shift + alt + i = 다중셀럭터
 
+database에는 file을 저장시키는것이 아닌 folder를 만들어서 location만 저장해 보내준다.
+
 sudo mongod --dbpath ~/data/db
