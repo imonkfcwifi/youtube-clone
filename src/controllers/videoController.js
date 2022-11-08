@@ -47,12 +47,14 @@ export const getUpload = (req, res) => {
 }
 
 export const postUpload = async (req, res) => {
+    const { path: fileUrl } = req.file
     const { title, hashtags, description } = req.body;
     try {
         await dideo.create(
             {
 
                 title,
+                fileUrl,
                 description,
                 createdAt: Date.now(),
                 hashtags: dideo.formatHashtags(hashtags),

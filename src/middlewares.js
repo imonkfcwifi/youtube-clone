@@ -32,4 +32,15 @@ export const publicOnlyMiddleware = (req, res, next) => {
 // locals는 templete이 local object에 접근할 수 있게 해주는 장치이다.
 // pug에서 마음껏 퍼갈 수 있음.
 
-export const uploadFiles = multer({ dest: "uploads/" });
+export const avatarUpload = multer({
+    dest: "uploads/avartars/", limits: {
+        fileSize: 100000000,
+
+    }
+});
+export const videoUpload = multer({
+    dest: "uploads/videos/", limits: {
+        fileSize: 100000000,
+
+    }
+})
