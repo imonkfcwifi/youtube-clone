@@ -265,4 +265,12 @@ export const postChangePassword = async (req, res) => {
 };
 
 
-export const see = (req, res) => res.send("see the profile");
+export const see = async (req, res) => {
+    const { id } = req.params;
+    // why not req.session.user._id ? => cuz we need pulic information so we need to get id from url (params)
+    const user = await User.findById(id);
+    if (!user) {
+        return res.status(404).render("404", { pageTitle: "Erorr : User not founded" });
+    }
+    return res.render("users/profile", { pageTitle: `${user.name} 의 Profile`, user });
+}
