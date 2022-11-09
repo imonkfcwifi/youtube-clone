@@ -54,9 +54,8 @@ export const postUpload = async (req, res) => {
     const { path: fileUrl } = req.file
     const { title, hashtags, description } = req.body;
     try {
-        await dideo.create(
+        const newVideo = await dideo.create(
             {
-
                 title,
                 fileUrl,
                 description,
@@ -65,6 +64,9 @@ export const postUpload = async (req, res) => {
                 hashtags: dideo.formatHashtags(hashtags),
             }
         )
+        const user = await User.findById(_id);
+        user.videos.push(newVideo._id);
+        user.save();
         return res.redirect("/");
     }
 
