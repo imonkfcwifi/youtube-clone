@@ -11,12 +11,13 @@ export const homepageVideos = async (req, res) => {
 
 export const watch = async (req, res) => {
     const { id } = req.params;
-    const video = await dideo.findById(id);
-    const owner = await User.findById(video.owner);
+    const video = await dideo.findById(id).populate("owner");
+    // mongoose의 도움으로 populate에 rerationship만 해주면 알아서 채워준다.
+
     if (!video) {
         return res.render("404", { pageTitle: "Video Not Found..!" });
     }
-    return res.render("watch", { pageTitle: video.title, video, owner });
+    return res.render("watch", { pageTitle: video.title, video });
 }
 export const getEdit = async (req, res) => {
     const { id } = req.params;

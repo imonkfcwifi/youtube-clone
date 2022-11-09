@@ -1,6 +1,7 @@
 import User from "../models/user";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import dideo from "../models/video";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -272,5 +273,7 @@ export const see = async (req, res) => {
     if (!user) {
         return res.status(404).render("404", { pageTitle: "Erorr : User not founded" });
     }
-    return res.render("users/profile", { pageTitle: `${user.name} 의 Profile`, user });
+    const videos = await dideo.find({ owner: user._id })
+    // user와 owner id 가 같은 video들을 찾는다
+    return res.render("users/profile", { pageTitle: `${user.name} 의 Profile`, user, videos });
 }
