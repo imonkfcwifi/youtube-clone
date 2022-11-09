@@ -119,7 +119,7 @@ export const finishGithubLogin = async (req, res) => {
             }
         })).json();
         // await( await fetch & 깃헙에 유저보내는 토큰).JSON => 즉 fetch 요청 후 fetch에 있는 내용의 JSOn을 받게 됨
-        console.log(emailData);
+
         const emailObj = emailData.find(
 
             (email) => email.primary === true && email.verified === true

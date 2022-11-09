@@ -1,4 +1,5 @@
 import dideo from "../models/video";
+import User from "../models/user";
 // video.find({}, (error, videos) => {]
 // static 을 이용해서 formatHashtags를 import 하지 않아도 dideo만 import 하면 끝
 // dideo.format~~ 로 써도 됨
@@ -11,10 +12,11 @@ export const homepageVideos = async (req, res) => {
 export const watch = async (req, res) => {
     const { id } = req.params;
     const video = await dideo.findById(id);
+    const owner = await User.findById(video.owner);
     if (!video) {
         return res.render("404", { pageTitle: "Video Not Found..!" });
     }
-    return res.render("watch", { pageTitle: video.title, video });
+    return res.render("watch", { pageTitle: video.title, video, owner });
 }
 export const getEdit = async (req, res) => {
     const { id } = req.params;
@@ -47,6 +49,7 @@ export const getUpload = (req, res) => {
 }
 
 export const postUpload = async (req, res) => {
+    const { user: { _id }, } = req.session;
     const { path: fileUrl } = req.file
     const { title, hashtags, description } = req.body;
     try {
@@ -57,6 +60,7 @@ export const postUpload = async (req, res) => {
                 fileUrl,
                 description,
                 createdAt: Date.now(),
+                owner: _id,
                 hashtags: dideo.formatHashtags(hashtags),
             }
         )
