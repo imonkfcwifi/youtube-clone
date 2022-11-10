@@ -14,7 +14,9 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function () {
-    this.password = await bcrypt.hash(this.password, 5);
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 5);
+    }
 });
 
 // 서로 나뉘어져 있던 콜렉션들을 서로 연결하기! 비디오 db에는 생산자 id를 넣어주고 유저 db에는 유저가 만든 비디오 id를 넣어주고

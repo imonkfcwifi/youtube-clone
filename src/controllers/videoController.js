@@ -21,20 +21,32 @@ export const watch = async (req, res) => {
 }
 export const getEdit = async (req, res) => {
     const { id } = req.params;
+    const {
+        user: { _id },
+    } = req.session;
     const video = await dideo.findById(id);
     if (!video) {
         return res.status(404).render("404", { pageTitle: "Video Not Found..!" });
+    }
+    if (String(video.owner) !== String(_id)) {
+        return res.status(403).redirect("/");
     }
     return res.render("edit", { pageTitle: `Edit : ${video.title}`, video });
 }
 
 export const postEdit = async (req, res) => {
+    const {
+        user: { _id },
+    } = req.session;
     const { id } = req.params;
     const { title, description, hashtags } = req.body
     const video = await dideo.exists({ _id: id });
     // find mongoose id (property) = const id (any)
     if (!video) {
         return res.render("404", { pageTitle: "Video Not Found..!" });
+    }
+    if (String(video.owner) !== String(_id)) {
+        return res.status(403).redirect("/");
     }
     await dideo.findByIdAndUpdate(id, {
         title,
@@ -82,6 +94,16 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res) => {
     const { id } = req.params;
+    const {
+        user: { _id },
+    } = req.session;
+    const video = await dideo.findById(id);
+    if (!video) {
+        return res.status(404).render("404", { pageTitle: "Video not found." });
+    }
+    if (String(video.owner) !== String(_id)) {
+        return res.status(403).redirect("/");
+    }
     await dideo.findByIdAndDelete(id);
     // delete video
     // what is diffrent by remove and delete?
