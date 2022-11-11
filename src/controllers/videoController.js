@@ -5,7 +5,9 @@ import User from "../models/user";
 // dideo.format~~ 로 써도 됨
 export const homepageVideos = async (req, res) => {
     // synchronous 상황을 해야 await 가능 cuz await은 문법상 funtion에서만 활용가능
-    const videos = await dideo.find({}).sort({ createdAt: "asc" });
+    const videos = await dideo.find({})
+        .sort({ createdAt: "desc" })
+        .populate("owner");;
     return res.render("home", { pageTitle: `The Korean Leaguer`, videos });
 }
 
@@ -120,7 +122,7 @@ export const search = async (req, res) => {
             title: {
                 $regex: new RegExp(keyword, "i"),
             },
-        });
+        }).populate("owner");
     }
     return res.render("search", { pageTitle: "Search", videos });
 }

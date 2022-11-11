@@ -1,10 +1,8 @@
 mixin video(dideo)
-        div
-            h4 
-                a(href=`/videos/${dideo.id}`)=dideo.title 
-            p=dideo.description
-            ul
-                each hashtag in dideo.hashtags
-                    li=hashtag 
-            small=dideo.createdAt
-            hr
+    a(href=`/videos/${dideo.id}`).video-mixin
+        div.video-mixin__thumb
+        div.video-mixin__data
+            span.video-mixin__title=dideo.title
+            div.video-mixin__meta
+                span #{dideo.owner.name} • 
+                span #{dideo.meta.views} 회
