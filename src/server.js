@@ -25,6 +25,7 @@ app.use(session({
 
     store: Mongostore.create({ mongoUrl: process.env.DB_URL }),
 }));
+app.use("/static", express.static("assets"));
 app.use("/uploads", express.static("uploads"));
 
 // 이로서 알게된 사실 : middle ware 의 next를 잘 활용해서 해야한다.
