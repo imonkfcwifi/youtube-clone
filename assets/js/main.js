@@ -16,7 +16,7 @@
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _scss_styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/styles.scss */ \"./src/client/scss/styles.scss\");\n\n\nconst hello = async () => {\n  alert(\"hi! its working\");\n  const x = await fetch(\"\");\n};\n\nhello();\n\n//# sourceURL=webpack://youtube/./src/client/js/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _scss_styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/styles.scss */ \"./src/client/scss/styles.scss\");\n\nconsole.log(\"hi\");\nalert(\"it works\");\n\n//# sourceURL=webpack://youtube/./src/client/js/main.js?");
 
 /***/ }),
 

@@ -7,8 +7,8 @@
         "url": "git+https://github.com/imonkfcwifi/wetube.git"
     },
     "scripts": {
-        "dev": "nodemon --exec babel-node src/init.js",
-        "assets": "webpack --config webpack.config.js"
+        "dev:server": "nodemon",
+        "dev:assets": "webpack"
     },
     "keywords": [
         "The Korean Leaguer!, Heung min son, Kim min jae, Kangin Lee"

@@ -74,4 +74,9 @@ alt + shift + drag , shift + alt + i = 다중셀럭터
 
 database에는 file을 저장시키는것이 아닌 folder를 만들어서 location만 저장해 보내준다.
 
+npm run dev = launch backend
+npm run assets = launch frontend
+
+/* => 하위 파일 모두
+
 sudo mongod --dbpath ~/data/db
