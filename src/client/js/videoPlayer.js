@@ -80,14 +80,21 @@ const handleTimelineSet = () => {
     setVideoPlayStatus = false;
 }
 
-const keydown = (event) => {
-    console.log(event); if (event.code == "Space") {
-        handlePlayClick(); event.preventDefault();
+//이 함수가 스페이스 키를 눌렀을 때도 작동하도록
+
+function keyMove(e) {
+    if (e.which === 32) {
+        // console.log('space');
+        if (video.paused) {
+            video.play()
+        } else {
+            video.pause()
+        }
     }
-    else { event.preventDefault(); }
+
 }
 
-window.addEventListener("keydown", keydown);
+
 timeline.addEventListener("change", handleTimelineSet);
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
@@ -95,4 +102,5 @@ volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
+window.addEventListener("keydown", keyMove);
 
