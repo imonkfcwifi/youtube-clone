@@ -39,12 +39,21 @@ const handleVolumeChange = (event) => {
     video.volume = value;
 };
 
+const formatTime = (seconds) =>
+    new Date(seconds * 1000).toISOString().substring(11, 19);
+
+
+// const formatTime 에서 중괄호를 없애야해요.
+// 보통 { }로 객체를 만드는데,
+// new Date를 쓰면 그 자체로 새로운 객체를 만드는것이니까요!
+// {} 를 쓰실거라면 {}안에서 return new Date()이런식으로 리턴을 해줘야합니다
+
 const handleLoadedMetadata = () => {
-    totalTime.innerText = Math.floor(video.duration);
+    totalTime.innerText = formatTime(Math.floor(video.duration));
 };
 
 const handleTimeUpdate = () => {
-    currenTime.innerText = Math.floor(video.currentTime);
+    currenTime.innerText = formatTime(Math.floor(video.currentTime));
 };
 
 playBtn.addEventListener("click", handlePlayClick);
