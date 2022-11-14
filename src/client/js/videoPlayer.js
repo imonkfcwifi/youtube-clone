@@ -82,19 +82,53 @@ const handleTimelineSet = () => {
 
 //이 함수가 스페이스 키를 눌렀을 때도 작동하도록
 
-function keyMove(e) {
-    if (e.which === 32) {
-        // console.log('space');
-        if (video.paused) {
-            video.play()
-        } else {
-            video.pause()
+
+
+(function () {
+    var k = function (action) {
+        var eventObj = document.createEvent("Events");
+
+        eventObj.event("keydown", true, true);
+        eventObj.keyCode = 75;
+        eventObj.which = 75;
+
+        document.body.dispatchEvent(eventObj);
+    };
+
+    var killSpaceBar = function (evt) {
+
+        var target = evt.target || {},
+            isInput = ("INPUT" == target.tagName || "TEXTAREA" == target.tagName || "SELECT" == target.tagName || "EMBED" == target.tagName);
+
+        // if we're an input or not a real target exit
+        if (isInput || !target.tagName) return;
+
+        // if we're a fake input like the comments exit
+        if (target && target.getAttribute && target.getAttribute('role') === 'textbox') return;
+
+        // ignore the space and send a 'k' to pause
+        if (evt.keyCode === 32) {
+            if (video.paused) {
+                video.play()
+            } else {
+                video.pause()
+            }
+
+            evt.preventDefault();
+            k();
         }
-    }
+    };
 
-}
+    document.addEventListener("keydown", killSpaceBar, false);
 
+})();
 
+const handleVideoEnded = () => {
+    video.currentTime = 0;
+    playBtn.innerText = "Play";
+};
+
+video.addEventListener("ended", handleVideoEnded);
 timeline.addEventListener("change", handleTimelineSet);
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
