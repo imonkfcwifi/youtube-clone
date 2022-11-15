@@ -5,6 +5,9 @@ const volumeRange = document.getElementById("volume");
 const currenTime = document.getElementById("currenTime");
 const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
+const fullScreenBtn = document.getElementById("fullScreen");
+const videoContainer = document.getElementById("videoContainer");
+
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
@@ -85,28 +88,7 @@ const handleTimelineSet = () => {
 
 
 (function () {
-    var k = function (action) {
-        var eventObj = document.createEvent("Events");
-
-        eventObj.event("keydown", true, true);
-        eventObj.keyCode = 75;
-        eventObj.which = 75;
-
-        document.body.dispatchEvent(eventObj);
-    };
-
-    var killSpaceBar = function (evt) {
-
-        var target = evt.target || {},
-            isInput = ("INPUT" == target.tagName || "TEXTAREA" == target.tagName || "SELECT" == target.tagName || "EMBED" == target.tagName);
-
-        // if we're an input or not a real target exit
-        if (isInput || !target.tagName) return;
-
-        // if we're a fake input like the comments exit
-        if (target && target.getAttribute && target.getAttribute('role') === 'textbox') return;
-
-        // ignore the space and send a 'k' to pause
+    const killSpaceBar = function (evt) {
         if (evt.keyCode === 32) {
             if (video.paused) {
                 video.play()
@@ -115,17 +97,26 @@ const handleTimelineSet = () => {
             }
 
             evt.preventDefault();
-            k();
         }
     };
 
-    document.addEventListener("keydown", killSpaceBar, false);
-
+    document.addEventListener("keydown", killSpaceBar);
 })();
 
 const handleVideoEnded = () => {
     video.currentTime = 0;
     playBtn.innerText = "Play";
+};
+
+const handleFullscreen = () => {
+    const fullscreen = document.fullscreenElement;
+    if (fullscreen) {
+        document.exitFullscreen();
+        fullScreenBtn.innerText = "Enter Full Screen";
+    } else {
+        videoContainer.requestFullscreen();
+        fullScreenBtn.innerText = "Exit Full Screen";
+    }
 };
 
 video.addEventListener("ended", handleVideoEnded);
@@ -136,5 +127,5 @@ volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
-window.addEventListener("keydown", keyMove);
+fullScreenBtn.addEventListener("click", handleFullscreen);
 
