@@ -152,6 +152,14 @@ document.addEventListener("keyup", (event) => {
     }
 });
 
+const handleEnded = () => {
+    const { id } = videoContainer.dataset;
+    fetch(`/api/videos/${id}/view`, {
+        method: "POST",
+    });
+};
+
+video.addEventListener("ended", handleEnded);
 video.addEventListener("click", handlePlayClick);
 video.addEventListener("ended", handleVideoEnded);
 timeline.addEventListener("change", handleTimelineSet);
