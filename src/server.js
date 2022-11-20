@@ -28,7 +28,11 @@ app.use(session({
 }));
 app.use("/static", express.static("assets"));
 app.use("/uploads", express.static("uploads"));
-
+app.use((req, res, next) => {
+    res.header("Cross-Origin-Embedder-Policy", "require-corp");
+    res.header("Cross-Origin-Opener-Policy", "same-origin");
+    next();
+});
 // 이로서 알게된 사실 : middle ware 의 next를 잘 활용해서 해야한다.
 // 기존에 존재하던 req.res와 달리 express의 middleware를 활용하는 부분에서 몇가지를 쓸때는
 // 최종 return 하기전 next를 해줘야 다음 middleware로 넘어갈수있기 때문이다.
