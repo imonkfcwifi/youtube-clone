@@ -1,8 +1,8 @@
-mixin video(dideo)
-    a(href=`/videos/${dideo.id}`).video-mixin
-        div.video-mixin__thumb
+mixin video(video)
+    a(href=`/videos/${video.id}`).video-mixin
+        div.video-mixin__thumb(style=`background-image:url(${video.thumbUrl});background-size:cover;background-position:center;`)
         div.video-mixin__data
-            span.video-mixin__title=dideo.title
+            span.video-mixin__title=video.title
             div.video-mixin__meta
-                span #{dideo.owner.name} • 
-                span #{dideo.meta.views} 회
+                span #{video.owner.name} • 
+                span #{video.meta.views} 회

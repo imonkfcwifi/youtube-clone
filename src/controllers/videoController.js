@@ -65,13 +65,15 @@ export const getUpload = (req, res) => {
 
 export const postUpload = async (req, res) => {
     const { user: { _id }, } = req.session;
-    const { path: fileUrl } = req.file
+    const { video, thumb } = req.files;
+    console.log(video, thumb);
     const { title, hashtags, description } = req.body;
     try {
         const newVideo = await dideo.create(
             {
                 title,
-                fileUrl,
+                fileUrl: video[0].path,
+                thumbUrl: thumb[0].path.replace(/[\\]/g, "/"),
                 description,
                 createdAt: Date.now(),
                 owner: _id,
