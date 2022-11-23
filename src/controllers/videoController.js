@@ -76,9 +76,9 @@ export const postUpload = async (req, res) => {
         const newVideo = await dideo.create(
             {
                 title,
-                fileUrl: video[0].path,
-                thumbUrl: thumb[0].path.replace(/[\\]/g, "/"),
                 description,
+                fileUrl: video[0].path,
+                thumbUrl: thumb[0].path,
                 createdAt: Date.now(),
                 owner: _id,
                 hashtags: dideo.formatHashtags(hashtags),
@@ -91,7 +91,7 @@ export const postUpload = async (req, res) => {
     }
 
     catch (error) {
-        console.log(error);
+
         return res.status(400).render("upload",
             {
                 pageTitle: "Upload Video",

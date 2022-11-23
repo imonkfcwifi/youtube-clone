@@ -27,6 +27,7 @@ app.use(session({
 
     store: Mongostore.create({ mongoUrl: process.env.DB_URL }),
 }));
+app.use(flash());
 app.use("/static", express.static("assets"));
 app.use("/uploads", express.static("uploads"));
 app.use((req, res, next) => {
@@ -46,6 +47,5 @@ app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 app.use("/api", apiRouter);
-app.use(flash());
 // we can communicate with user form req.flash
 export default app;

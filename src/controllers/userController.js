@@ -5,7 +5,6 @@ import dideo from "../models/video";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
-    console.log(req.body);
     const { name, username, email, password, password2, location } = req.body;
     const exists = await User.exists({ $or: [{ username }, { email }] });
     const pageTitle = "Join";
@@ -26,7 +25,6 @@ export const postJoin = async (req, res) => {
         })
         return res.redirect("/login");
     } catch (error) {
-        console.log(error);
         return res.status(400).render("join",
             {
                 pageTitle: "Upload Video",
@@ -112,8 +110,6 @@ export const finishGithubLogin = async (req, res) => {
                 },
             })
         ).json();
-
-        console.log(userData);
         const emailData = await (await fetch(`${apiUrl}/user/emails`, {
             headers: {
                 Authorization: `token ${access_token}`,
@@ -184,7 +180,6 @@ export const postEdit = async (req, res) => {
         },
         body: { name, email, username, location }, file,
     } = req;
-    console.log(file);
     let searchParam = [];
     if (sessionEmail !== email) {
         searchParam.push({ email });

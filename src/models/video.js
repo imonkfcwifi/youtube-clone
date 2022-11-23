@@ -21,6 +21,9 @@ const videoSchema = new mongoose.Schema({
         rating: { type: Number, default: 0, required: true },
 
     },
+    comments: [
+        { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
+    ],
     owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" }
     // User model의 obj id라고 알려준다. (User model로 부터 오는)
 });
