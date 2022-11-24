@@ -1,3 +1,5 @@
+const { async } = require("regenerator-runtime");
+
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
 const muteBtn = document.getElementById("mute");
@@ -91,22 +93,50 @@ const handleTimelineSet = () => {
 //이 함수가 스페이스 키를 눌렀을 때도 작동하도록
 
 
+// const handlePressSpace = async (event) => {
+//     if (event.target === document.body && event.code === "Space") {
+//     await handlePlayVideo();
 
-(function () {
-    const killSpaceBar = function (evt) {
-        if (evt.keyCode === 32) {
-            if (video.paused) {
-                video.play()
-            } else {
-                video.pause()
-            }
 
-            evt.preventDefault();
-        }
-    };
+const handleKeydown = async (event) => {
+    if (event.target.id === "textarea") {
+        return;
+    }
+    switch (event.keyCode) {
+        case 77:
+            handleMuteClick();
+            break;
+        case 70:
+            handleFullscreen();
+            break;
 
-    document.addEventListener("keydown", killSpaceBar);
-})();
+        case 37:
+            video.currentTime -= 5;
+            break;
+        case 39:
+            video.currentTime += 5;
+            break;
+        case 38:
+            volumeValue += 0.1;
+            volumeRange.value = volumeValue;
+            video.volume = volumeRange.value;
+            event.preventDefault();
+            break;
+        case 40:
+            volumeValue -= 0.1;
+            volumeRange.value = volumeValue;
+            video.volume = volumeRange.value;
+            event.preventDefault();
+            changeMuteIcon();
+            break;
+        case 32:
+            handlePlayClick();
+            event.preventDefault();
+            break;
+    }
+};
+
+
 
 const handleVideoEnded = () => {
     video.currentTime = 0;
@@ -171,3 +201,4 @@ timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
+document.addEventListener("keydown", handleKeydown);
