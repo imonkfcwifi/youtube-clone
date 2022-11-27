@@ -100,4 +100,13 @@ PUT : 리소스를 대체, 해당 리소스가 없으면 생성
 PATCH : 리소스를 일부만 변경
 DELETE : 리소스 삭제
 
+
+start는 말 그대로 build/init.js를 시작하는 것인데 서버를 시작하는 것이라고 볼 수 있다. 이것은 dev:sever와 같은 역할을 한다. dev:sever는 nodemon을 실행하는데 nodemon을 보게 되면 babel-node로 src/init.js를 실행한다.
+start와 dev:sever가 다른 점은 strat는 babel이 없이 init.js를 시작하는데, 이유는 babel이 필요없기 때문이다. build 파일에는 이미 컴파일 된 코드들만 있기 때문이다.
+
+다음에 build 부분을 살펴보면 그냥 build 명령어는 build:sever와 build:assets를 포함한다.
+build:sever는 src 폴더 안에 있는 파일들을 컴파일 해서 build 폴더에 저장한다.
+
+build:assets와 dev:assets는 둘다 webpack을 실행시키는데 dev:assets와 dev:assets가 다른 점은 build:assets는 production모드로 실행해서 코드를 압축시킨다. dev:assets는 develop 모드로 실행한다. 둘다 assets에 파일을 저장한다.
+
 sudo mongod --dbpath ~/data/db
