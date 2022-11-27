@@ -1,5 +1,6 @@
 import dideo from "../models/video";
 import User from "../models/user";
+import Comment from "../models/Comment";
 // video.find({}, (error, videos) => {]
 // static 을 이용해서 formatHashtags를 import 하지 않아도 dideo만 import 하면 끝
 // dideo.format~~ 로 써도 됨
@@ -13,7 +14,8 @@ export const homepageVideos = async (req, res) => {
 
 export const watch = async (req, res) => {
     const { id } = req.params;
-    const video = await dideo.findById(id).populate("owner");
+    const video = await dideo.findById(id).populate("owner").populate("comments");
+    console.log(video);
     // mongoose의 도움으로 populate에 rerationship만 해주면 알아서 채워준다.
 
     if (!video) {
@@ -146,9 +148,36 @@ export const registerView = async (req, res) => {
     return res.sendStatus(200);
 };
 
-export const createComment = (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
-    return res.end();
+export const createComment = async (req, res) => {
+    const {
+        session: { user },
+        body: { text },
+        params: { id },
+    } = req;
+    const video = await dideo.findById(id);
+    if (!video) {
+        return res.sendStatus(404);
+    }
+    const comment = await Comment.create({
+        text,
+        owner: user._id,
+        video: id,
+    });
+    video.comments.push(comment._id);
+    video.save();
+    return res.status(201).json({ newCommentId: comment._id });
 };
 // Interactivity: Changing a page without changing the url
+export const deleteComment = async (req, res) => {
+    const { id, videoid } = req.body; // comment id, video id
+    const { _id } = req.session.user; // user id
+    const { owner } = await Comment.findById(id);
+    const video = await dideo.findById(videoid);
+    if (String(owner) !== _id) return res.sendStatus(403);
+    else {
+        await Comment.findByIdAndDelete(id);
+        video.comments.splice(video.comments.indexOf(videoid), 1);
+        video.save();
+        return res.sendStatus(200);
+    }
+};
