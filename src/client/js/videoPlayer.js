@@ -188,7 +188,7 @@ const handleEnded = () => {
         method: "POST",
     });
 };
-console.log("im working");
+console.log("im working2");
 video.addEventListener("ended", handleEnded);
 video.addEventListener("click", handlePlayClick);
 video.addEventListener("ended", handleVideoEnded);
