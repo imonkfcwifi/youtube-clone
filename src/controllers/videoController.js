@@ -5,179 +5,176 @@ import Comment from "../models/Comment";
 // static 을 이용해서 formatHashtags를 import 하지 않아도 dideo만 import 하면 끝
 // dideo.format~~ 로 써도 됨
 export const homepageVideos = async (req, res) => {
-    // synchronous 상황을 해야 await 가능 cuz await은 문법상 funtion에서만 활용가능
-    const videos = await dideo.find({})
-        .sort({ createdAt: "desc" })
-        .populate("owner");;
-    return res.render("home", { pageTitle: `The Korean Leaguer`, videos });
-}
+  // synchronous 상황을 해야 await 가능 cuz await은 문법상 funtion에서만 활용가능
+  const videos = await dideo
+    .find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner");
+  return res.render("home", { pageTitle: `The Korean Leaguer`, videos });
+};
 
 export const watch = async (req, res) => {
-    const { id } = req.params;
-    const video = await dideo.findById(id).populate("owner").populate("comments");
-    console.log(video);
-    // mongoose의 도움으로 populate에 rerationship만 해주면 알아서 채워준다.
+  const { id } = req.params;
+  const video = await dideo.findById(id).populate("owner").populate("comments");
+  console.log(video);
+  // mongoose의 도움으로 populate에 rerationship만 해주면 알아서 채워준다.
 
-    if (!video) {
-        return res.render("404", { pageTitle: "Video Not Found..!" });
-    }
-    return res.render("watch", { pageTitle: video.title, video });
-}
+  if (!video) {
+    return res.render("404", { pageTitle: "Video Not Found..!" });
+  }
+  return res.render("watch", { pageTitle: video.title, video });
+};
 export const getEdit = async (req, res) => {
-    const { id } = req.params;
-    const {
-        user: { _id },
-    } = req.session;
-    const video = await dideo.findById(id);
-    if (!video) {
-        return res.status(404).render("404", { pageTitle: "Video Not Found..!" });
-    }
-    if (String(video.owner) !== String(_id)) {
-        req.flash("error", "Not authorized");
-        return res.status(403).redirect("/");
-    }
-    return res.render("edit", { pageTitle: `Edit : ${video.title}`, video });
-}
+  const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
+  const video = await dideo.findById(id);
+  if (!video) {
+    return res.status(404).render("404", { pageTitle: "Video Not Found..!" });
+  }
+  if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not authorized");
+    return res.status(403).redirect("/");
+  }
+  return res.render("edit", { pageTitle: `Edit : ${video.title}`, video });
+};
 
 export const postEdit = async (req, res) => {
-    const {
-        user: { _id },
-    } = req.session;
-    const { id } = req.params;
-    const { title, description, hashtags } = req.body
-    const video = await dideo.findById({ _id: id });
-    // find mongoose id (property) = const id (any)
-    if (!video) {
-        return res.render("404", { pageTitle: "Video Not Found..!" });
-    }
-    if (String(video.owner) !== String(_id)) {
-        req.flash("error", "Not authorized");
+  const {
+    user: { _id },
+  } = req.session;
+  const { id } = req.params;
+  const { title, description, hashtags } = req.body;
+  const video = await dideo.findById({ _id: id });
+  // find mongoose id (property) = const id (any)
+  if (!video) {
+    return res.render("404", { pageTitle: "Video Not Found..!" });
+  }
+  if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not authorized");
 
-        return res.status(403).redirect("/");
-    }
-    await dideo.findByIdAndUpdate(id, {
-        title,
-        description,
-        hashtags: dideo.formatHashtags(hashtags)
-    })
-    req.flash("success", "Changes saved.");
+    return res.status(403).redirect("/");
+  }
+  await dideo.findByIdAndUpdate(id, {
+    title,
+    description,
+    hashtags: dideo.formatHashtags(hashtags),
+  });
+  req.flash("success", "Changes saved.");
 
-    return res.redirect(`/videos/${id}`);
-}
+  return res.redirect(`/videos/${id}`);
+};
 
 export const getUpload = (req, res) => {
-    return res.render("upload", { pageTitle: "Upload Video" })
-}
+  return res.render("upload", { pageTitle: "Upload Video" });
+};
 
 export const postUpload = async (req, res) => {
-    const { user: { _id }, } = req.session;
-    const { video, thumb } = req.files;
-    console.log(video, thumb);
-    const { title, hashtags, description } = req.body;
-    try {
-        const newVideo = await dideo.create(
-            {
-                title,
-                description,
-                fileUrl: video[0].path,
-                thumbUrl: thumb[0].path,
-                createdAt: Date.now(),
-                owner: _id,
-                hashtags: dideo.formatHashtags(hashtags),
-            }
-        )
-        const user = await User.findById(_id);
-        user.videos.push(newVideo._id);
-        user.save();
-        return res.redirect("/");
-    }
-
-    catch (error) {
-
-        return res.status(400).render("upload",
-            {
-                pageTitle: "Upload Video",
-                errorMessage: error._message
-            })
-    }
+  const {
+    user: { _id },
+  } = req.session;
+  const { video, thumb } = req.files;
+  console.log(video, thumb);
+  const { title, hashtags, description } = req.body;
+  try {
+    const newVideo = await dideo.create({
+      title,
+      description,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
+      createdAt: Date.now(),
+      owner: _id,
+      hashtags: dideo.formatHashtags(hashtags),
+    });
+    const user = await User.findById(_id);
+    user.videos.push(newVideo._id);
+    user.save();
+    return res.redirect("/");
+  } catch (error) {
+    return res.status(400).render("upload", {
+      pageTitle: "Upload Video",
+      errorMessage: error._message,
+    });
+  }
 };
 
 export const deleteVideo = async (req, res) => {
-    const { id } = req.params;
-    const {
-        user: { _id },
-    } = req.session;
-    const video = await dideo.findById(id);
-    if (!video) {
-        return res.status(404).render("404", { pageTitle: "Video not found." });
-    }
-    if (String(video.owner) !== String(_id)) {
-        req.flash("error", "Not authorized");
-        return res.status(403).redirect("/");
-    }
-    await dideo.findByIdAndDelete(id);
-    // delete video
-    // what is diffrent by remove and delete?
-    // remove is permanent delete in sever so we need do delete in findByIdAndDelete!
-    return res.redirect("/");
-
-}
+  const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
+  const video = await dideo.findById(id);
+  if (!video) {
+    return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not authorized");
+    return res.status(403).redirect("/");
+  }
+  await dideo.findByIdAndDelete(id);
+  // delete video
+  // what is diffrent by remove and delete?
+  // remove is permanent delete in sever so we need do delete in findByIdAndDelete!
+  return res.redirect("/");
+};
 
 export const search = async (req, res) => {
-    const { keyword } = req.query;
-    let videos = [];
-    if (keyword) {
-        videos = await dideo.find({
-            title: {
-                $regex: new RegExp(keyword, "i"),
-            },
-        }).populate("owner");
-    }
-    return res.render("search", { pageTitle: "Search", videos });
-}
-
+  const { keyword } = req.query;
+  let videos = [];
+  if (keyword) {
+    videos = await dideo
+      .find({
+        title: {
+          $regex: new RegExp(keyword, "i"),
+        },
+      })
+      .populate("owner");
+  }
+  return res.render("search", { pageTitle: "Search", videos });
+};
 
 export const registerView = async (req, res) => {
-    const { id } = req.params;
-    const video = await dideo.findById(id);
-    if (!video) {
-        return res.sendStatus(404);
-    }
-    video.meta.views = video.meta.views + 1;
-    await video.save();
-    return res.sendStatus(200);
+  const { id } = req.params;
+  const video = await dideo.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  video.meta.views = video.meta.views + 1;
+  await video.save();
+  return res.sendStatus(200);
 };
 
 export const createComment = async (req, res) => {
-    const {
-        session: { user },
-        body: { text },
-        params: { id },
-    } = req;
-    const video = await dideo.findById(id);
-    if (!video) {
-        return res.sendStatus(404);
-    }
-    const comment = await Comment.create({
-        text,
-        owner: user._id,
-        video: id,
-    });
-    video.comments.push(comment._id);
-    video.save();
-    return res.status(201).json({ newCommentId: comment._id });
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+  const video = await dideo.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id,
+  });
+  video.comments.push(comment._id);
+  video.save();
+  return res.status(201).json({ newCommentId: comment._id });
 };
 // Interactivity: Changing a page without changing the url
 export const deleteComment = async (req, res) => {
-    const { id, videoid } = req.body; // comment id, video id
-    const { _id } = req.session.user; // user id
-    const { owner } = await Comment.findById(id);
-    const video = await dideo.findById(videoid);
-    if (String(owner) !== _id) return res.sendStatus(403);
-    else {
-        await Comment.findByIdAndDelete(id);
-        video.comments.splice(video.comments.indexOf(videoid), 1);
-        video.save();
-        return res.sendStatus(200);
-    }
+  const { id, videoid } = req.body; // comment id, video id
+  const { _id } = req.session.user; // user id
+  const { owner } = await Comment.findById(id);
+  const video = await dideo.findById(videoid);
+  if (String(owner) !== _id) return res.sendStatus(403);
+  else {
+    await Comment.findByIdAndDelete(id);
+    video.comments.splice(video.comments.indexOf(videoid), 1);
+    video.save();
+    return res.sendStatus(200);
+  }
 };
